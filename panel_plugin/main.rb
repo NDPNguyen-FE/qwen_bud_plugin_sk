@@ -25,6 +25,11 @@ module PanelPlugin
     # Geometry Cleaner - Làm sạch hình học cho CNC
     load File.join(PLUGIN_DIR, '..', 'lib', 'geometry', 'cleaner.rb')
     
+    # Cabinet Core - Refactored parametric engine
+    load File.join(PLUGIN_DIR, '..', 'lib', 'cabinet', 'core', 'config.rb')
+    load File.join(PLUGIN_DIR, '..', 'lib', 'cabinet', 'core', 'calculator.rb')
+    load File.join(PLUGIN_DIR, '..', 'lib', 'cabinet', 'core', 'builder.rb')
+    
     load File.join(PLUGIN_DIR, 'core', 'groove_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'kerf_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'joinery_engine.rb')
