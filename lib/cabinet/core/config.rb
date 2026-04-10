@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PanelPlugin
+module PanelCore
   module Cabinet
     module Core
       # Cấu hình tiêu chuẩn cho kết cấu tủ

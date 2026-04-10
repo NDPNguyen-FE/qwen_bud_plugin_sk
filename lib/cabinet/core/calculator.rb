@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PanelPlugin
+module PanelCore
   module Cabinet
     module Core
       # Bộ tính toán kích thước tham số cho tủ

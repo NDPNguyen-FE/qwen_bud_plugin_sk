@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PanelPlugin
+module PanelCore
   module Geometry
     # GeometryCleaner - Module làm sạch và tối ưu hóa hình học cho Panel
     # Đảm bảo panel xuất ra DXF/CNC không lỗi, số lượng entity tối giản

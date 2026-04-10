@@ -66,7 +66,7 @@ module PanelPlugin
       # =========================================================================
       def self._do_build(cfg, target_cabinet_id = nil)
         # Sử dụng Builder mới đã refactor
-        builder = PanelPlugin::Cabinet::Core::Builder.new(
+        builder = PanelCore::Cabinet::Core::Builder.new(
           width: cfg[:width],
           height: cfg[:height],
           depth: cfg[:depth],
@@ -416,7 +416,7 @@ module PanelPlugin
         # - Milestone 4: Nesting & Anti-Fly
         # - Milestone 5: CAM Export & Barcode
         # =========================================================================
-        abf_dict = PanelPlugin::ABF::Schema.initialize_panel_attributes(
+        abf_dict = PanelCore::ABF.initialize_panel_attributes(
           grp,
           role: spec[:role],
           material_code: (spec[:role] == :back) ? 'HDF_9MM' : 'MELAMINE_18MM',
@@ -427,16 +427,16 @@ module PanelPlugin
         # Spec dùng :front, :top, :back, :bot => ABF dùng edge_top, edge_bottom, edge_left, edge_right
         # Cần quy ước: front/bot/top/back trong spec tương ứng với cạnh nào trong local coordinates của tấm
         if spec.dig(:edge, :front)
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_bottom]] = true
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_bottom_code]] = 'PVC_1MM_WHITE' # Default
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_bottom]] = true
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_bottom_code]] = 'PVC_1MM_WHITE' # Default
         end
         if spec.dig(:edge, :top)
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_top]] = true
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_top_code]] = 'PVC_1MM_WHITE'
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_top]] = true
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_top_code]] = 'PVC_1MM_WHITE'
         end
         if spec.dig(:edge, :back)
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_left]] = true
-          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_left_code]] = 'PVC_1MM_WHITE'
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_left]] = true
+          abf_dict[PanelCore::ABF::EDGE_KEYS[:edge_left_code]] = 'PVC_1MM_WHITE'
         end
         # Cạnh phải (right) thường không dán với tủ base tiêu chuẩn
 
@@ -475,7 +475,7 @@ module PanelPlugin
         # Giảm số lượng entity, xóa cạnh dư, chuẩn hóa normals
         # =========================================================================
         begin
-          PanelPlugin::Geometry::Cleaner.clean!(grp)
+          PanelCore::Geometry::Cleaner.clean!(grp)
         rescue StandardError => e
           # Log lỗi nhưng không làm dừng quá trình tạo tủ
           puts "[CabinetBuilder] Warning: Geometry cleaning failed for #{spec[:name]}: #{e.message}"
