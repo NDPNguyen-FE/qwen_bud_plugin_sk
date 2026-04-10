@@ -15,7 +15,8 @@ module PanelCore
           return false unless group.is_a?(Sketchup::Group)
 
           entities = group.entities
-          return false if entities.empty? || !entities.respond_to?(:empty?)
+          # Sketchup::Entities doesn't have empty? method, use count.zero? instead
+          return false if entities.count.zero?
 
           Sketchup.active_model.start_operation('Clean Geometry', true)
 
