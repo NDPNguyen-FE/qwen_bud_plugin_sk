@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'set'
+
 module PanelCore
   module Geometry
     # GeometryCleaner - Module làm sạch và tối ưu hóa hình học cho Panel

@@ -6,7 +6,7 @@ module PanelPlugin
   module Tools
     class SelectPanelTool
       def activate
-        Sketchup::set_status_text(
+        Sketchup.active_model.set_status_text(
           'Click vào tấm ván để chọn | Double-click: Đổi chiều dày ván | Esc: Thoát',
           SB_PROMPT
         )
