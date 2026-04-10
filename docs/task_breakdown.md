@@ -15,10 +15,16 @@ Chi tiết phân rã công việc để xây dựng plugin hỗ trợ dựng nha
   - Đảm bảo tương thích ngược với dữ liệu cũ.
   - Tạo utility helper để truy xuất và gán attribute an toàn.
 - **Tiêu chí hoàn thành (DoD):**
-  - [ ] Mọi panel mới sinh ra đều tự động gán đầy đủ attribute mặc định.
-  - [ ] Có hàm utility `PanelMetadata.get(panel)` trả về object metadata chuẩn.
-  - [ ] Unit test kiểm tra tính toàn vẹn của schema (không thiếu field, đúng kiểu dữ liệu).
-  - [ ] Tài liệu hóa schema trong code (RDoc/YARD).
+  - [x] Mọi panel mới sinh ra đều tự động gán đầy đủ attribute mặc định.
+  - [x] Có hàm utility `PanelPlugin::ABF::Schema.initialize_panel_attributes()` và `validate_panel_attributes()`.
+  - [x] Unit test kiểm tra tính toàn vẹn của schema (không thiếu field, đúng kiểu dữ liệu).
+  - [x] Tài liệu hóa schema trong code (RDoc/YARD).
+  - [x] Tích hợp vào `CabinetBuilderTool._create_panel_group` để tự động áp dụng khi dựng tủ.
+- **Trạng thái:** ✅ HOÀN THÀNH
+- **File liên quan:** 
+  - `/workspace/lib/abf/schema.rb` (Mới)
+  - `/workspace/panel_plugin/tools/cabinet_builder_tool.rb` (Đã cập nhật)
+  - `/workspace/panel_plugin/main.rb` (Đã load module mới)
 
 ### Task 1.2: Làm sạch Hình học (Geometry Sanitization)
 - **Mô tả:** Viết module `GeometryCleaner` để tối ưu hóa entity trước khi xuất DXF.

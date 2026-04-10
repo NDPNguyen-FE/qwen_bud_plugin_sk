@@ -18,6 +18,10 @@ module PanelPlugin
     load File.join(PLUGIN_DIR, 'panel_core', 'attribute_manager.rb')
     load File.join(PLUGIN_DIR, 'panel_core', 'component_manager.rb')
     load File.join(PLUGIN_DIR, 'panel_core', 'undo_wrapper.rb')
+    
+    # ABF Integration - Schema chuẩn hóa thuộc tính
+    load File.join(PLUGIN_DIR, '..', 'lib', 'abf', 'schema.rb')
+    
     load File.join(PLUGIN_DIR, 'core', 'groove_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'kerf_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'joinery_engine.rb')
@@ -34,7 +38,7 @@ module PanelPlugin
     load File.join(PLUGIN_DIR, 'tools', 'shelf_divider_tool.rb')
     load File.join(PLUGIN_DIR, 'ui', 'library_panel.rb')
     load File.join(PLUGIN_DIR, 'ui', 'cabinet_builder_panel.rb')
-    load File.join(PLUGIN_DIR, 'ui', 'divider_builder_panel.rb')
+    # load File.join(PLUGIN_DIR, 'ui', 'divider_builder_panel.rb') # Missing file!
     load File.join(PLUGIN_DIR, 'library', 'template_manager.rb')
   end
 
@@ -79,9 +83,9 @@ module PanelPlugin
       PanelPlugin::UI::CabinetBuilderPanel.show
     end
 
-    menu.add_item('📐 Chia Đợt / Vách Nội Thất') do
-      PanelPlugin::UI::DividerBuilderPanel.show
-    end
+    # menu.add_item('📐 Chia Đợt / Vách Nội Thất') do
+    #   PanelPlugin::UI::DividerBuilderPanel.show
+    # end
 
     menu.add_item('🎯 Tạo Đợt (Raycast - Production)') do
       Sketchup.active_model.select_tool(PanelPlugin::Tools::ProductionShelfTool.new)

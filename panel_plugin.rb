@@ -19,5 +19,9 @@ module PanelPlugin
     EXTENSION.version     = '1.0.0'
     EXTENSION.copyright   = '2026 Core Team'
     Sketchup.register_extension(EXTENSION, true)
+    
+    # Auto-load dev tools cho môi trường development
+    dev_reload_path = File.join(File.dirname(__FILE__), 'dev_reload.rb')
+    load dev_reload_path if File.exist?(dev_reload_path)
   end
 end

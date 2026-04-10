@@ -375,7 +375,41 @@ module PanelPlugin
         face.reverse! if face.normal.z < 0
         face.pushpull(slz) if slz.abs > 0.001
 
-        # Metadata đầy đủ theo kết cấu thi công
+        # =========================================================================
+        # TÍCH HỢP ABF SCHEMA - Task 1.1: Chuẩn hóa thuộc tính cho ABF
+        # =========================================================================
+        # Khởi tạo đầy đủ attribute theo chuẩn ABF để sẵn sàng cho:
+        # - Milestone 2: Auto-drilling & Joinery (ABF Engine sẽ đọc các field này)
+        # - Milestone 4: Nesting & Anti-Fly
+        # - Milestone 5: CAM Export & Barcode
+        # =========================================================================
+        abf_dict = PanelPlugin::ABF::Schema.initialize_panel_attributes(
+          grp,
+          role: spec[:role],
+          material_code: (spec[:role] == :back) ? 'HDF_9MM' : 'MELAMINE_18MM',
+          thickness: lz.to_f
+        )
+        
+        # Cập nhật edge banding từ spec sang ABF schema (mapping logic)
+        # Spec dùng :front, :top, :back, :bot => ABF dùng edge_top, edge_bottom, edge_left, edge_right
+        # Cần quy ước: front/bot/top/back trong spec tương ứng với cạnh nào trong local coordinates của tấm
+        if spec.dig(:edge, :front)
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_bottom]] = true
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_bottom_code]] = 'PVC_1MM_WHITE' # Default
+        end
+        if spec.dig(:edge, :top)
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_top]] = true
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_top_code]] = 'PVC_1MM_WHITE'
+        end
+        if spec.dig(:edge, :back)
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_left]] = true
+          abf_dict[PanelPlugin::ABF::Schema::EDGE_KEYS[:edge_left_code]] = 'PVC_1MM_WHITE'
+        end
+        # Cạnh phải (right) thường không dán với tủ base tiêu chuẩn
+
+        # =========================================================================
+        # GIỮ LẠI METADATA CŨ (panel_core) - Để tương thích ngược với code cũ
+        # =========================================================================
         d = grp.attribute_dictionary('panel_core', true)
         d['part_name']       = spec[:name]
         d['role']            = spec[:role].to_s
