@@ -134,7 +134,7 @@ module PanelPlugin
       def self.insert_template(template_id, position = ORIGIN)
         tmpl = find_template(template_id)
         unless tmpl
-          Sketchup.messagebox("Không tìm thấy template: #{template_id}")
+          UI.messagebox("Không tìm thấy template: #{template_id}")
           return []
         end
 
@@ -188,7 +188,7 @@ module PanelPlugin
         panels = sel.select { |e| PanelCore::AttributeManager.panel?(e) }
 
         if panels.empty?
-          Sketchup.messagebox('Không có tấm ván nào được chọn để lưu vào thư viện.')
+          UI.messagebox('Không có tấm ván nào được chọn để lưu vào thư viện.')
           return false
         end
 

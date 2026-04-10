@@ -94,9 +94,9 @@ module PanelPlugin
 
       def update_status
         if @state == 0
-          Sketchup.status_text = "[Đánh Mộng CNC] BƯỚC 1: Click chọn tấm ván ĐÂM VÀO (Tấm Đợt - Chứa Mộng Dương)"
+          UI.status_text = "[Đánh Mộng CNC] BƯỚC 1: Click chọn tấm ván ĐÂM VÀO (Tấm Đợt - Chứa Mộng Dương)"
         else
-          Sketchup.status_text = "[Đánh Mộng CNC] BƯỚC 2: Click chọn tấm BỊ ĐÂM (Tấm Vách - Chứa Lỗ Mộng Âm)"
+          UI.status_text = "[Đánh Mộng CNC] BƯỚC 2: Click chọn tấm BỊ ĐÂM (Tấm Vách - Chứa Lỗ Mộng Âm)"
         end
       end
 
@@ -106,11 +106,11 @@ module PanelPlugin
 
       def process_joint
         defaults = [
-          Sketchup.read_default('panel_plugin', 'mt_length', '40.0'),
-          Sketchup.read_default('panel_plugin', 'mt_margin', '20.0'),
-          Sketchup.read_default('panel_plugin', 'mt_depth', '9.0'),
-          Sketchup.read_default('panel_plugin', 'mt_tool', '6.0'),
-          Sketchup.read_default('panel_plugin', 'mt_tol', '0.2')
+          UI.read_default('panel_plugin', 'mt_length', '40.0'),
+          UI.read_default('panel_plugin', 'mt_margin', '20.0'),
+          UI.read_default('panel_plugin', 'mt_depth', '9.0'),
+          UI.read_default('panel_plugin', 'mt_tool', '6.0'),
+          UI.read_default('panel_plugin', 'mt_tol', '0.2')
         ]
 
         prompts = [
@@ -131,11 +131,11 @@ module PanelPlugin
         t_dia = result[3].to_f
         tol   = result[4].to_f
 
-        Sketchup.write_default('panel_plugin', 'mt_length', result[0])
-        Sketchup.write_default('panel_plugin', 'mt_margin', result[1])
-        Sketchup.write_default('panel_plugin', 'mt_depth', result[2])
-        Sketchup.write_default('panel_plugin', 'mt_tool', result[3])
-        Sketchup.write_default('panel_plugin', 'mt_tol', result[4])
+        UI.write_default('panel_plugin', 'mt_length', result[0])
+        UI.write_default('panel_plugin', 'mt_margin', result[1])
+        UI.write_default('panel_plugin', 'mt_depth', result[2])
+        UI.write_default('panel_plugin', 'mt_tool', result[3])
+        UI.write_default('panel_plugin', 'mt_tol', result[4])
 
         options = {
           tenon_length: t_len.mm,
@@ -151,7 +151,7 @@ module PanelPlugin
         if res[:success]
           puts "[Joinery] Đã đánh mộng hoàn tất!"
         else
-          Sketchup.messagebox(res[:message])
+          UI.messagebox(res[:message])
         end
       end
     end

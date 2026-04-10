@@ -15,7 +15,7 @@ module PanelCore
           return false unless group.is_a?(Sketchup::Group)
 
           entities = group.entities
-          return false if entities.empty?
+          return false if entities.empty? || !entities.respond_to?(:empty?)
 
           Sketchup.active_model.start_operation('Clean Geometry', true)
 
@@ -46,6 +46,9 @@ module PanelCore
             Sketchup.active_model.commit_operation
           end
         end
+        
+        # Alias cho backward compatibility
+        alias_method :clean_group, :clean!
 
         # Xóa các entity bị ẩn hoặc không sử dụng
         def purge_hidden_entities(entities)

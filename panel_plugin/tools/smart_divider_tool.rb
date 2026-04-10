@@ -75,7 +75,7 @@ module PanelPlugin
         face = @ip.face
 
         unless face
-          Sketchup.messagebox(
+          UI.messagebox(
             "Không nhận được mặt phẳng.\n\n" \
             "Hướng dẫn: Double-click vào khoang tủ để vào edit-mode,\n" \
             "sau đó click vào một mặt phẳng bên trong."
@@ -98,7 +98,7 @@ module PanelPlugin
       private
 
       def _update_statusbar
-        Sketchup.set_status_text(
+        UI.set_status_text(
           'Chia Đợt/Vách: click vào mặt phẳng bên trong khoang tủ  |  [Esc] Thoát',
           SB_PROMPT
         )
@@ -109,7 +109,7 @@ module PanelPlugin
         # 1a. Find the container group/component
         container = _enclosing_container
         unless container
-          Sketchup.messagebox(
+          UI.messagebox(
             "Không tìm thấy khoang tủ.\n\n" \
             "• Double-click vào Group/Component của tủ để vào bên trong.\n" \
             "• Kích hoạt lại tool rồi click vào mặt phẳng trong khoang."
@@ -120,7 +120,7 @@ module PanelPlugin
         # 1b. Build local-space bounding box
         inner = _compute_inner_bounds(container)
         unless inner
-          Sketchup.messagebox(
+          UI.messagebox(
             "Không xác định được kích thước khoang trong.\n" \
             "Hãy chắc chắn group có ít nhất các mặt phẳng (sàn, vách hông, nóc)."
           )
@@ -155,7 +155,7 @@ module PanelPlugin
 
         # Validate direction
         unless %w[H V].include?(direction)
-          Sketchup.messagebox("Hướng chia phải là 'H' (ngang) hoặc 'V' (dọc).")
+          UI.messagebox("Hướng chia phải là 'H' (ngang) hoặc 'V' (dọc).")
           return
         end
 
@@ -218,22 +218,22 @@ module PanelPlugin
         inner_h_mm = _su2mm(inner_h_su)
 
         if n <= 0
-          Sketchup.messagebox('Số lượng phải lớn hơn 0.')
+          UI.messagebox('Số lượng phải lớn hơn 0.')
           return false
         end
 
         if n > 50
-          Sketchup.messagebox('Số lượng không được vượt quá 50.')
+          UI.messagebox('Số lượng không được vượt quá 50.')
           return false
         end
 
         if thick_mm < 3.0
-          Sketchup.messagebox('Độ dày phải >= 3 mm.')
+          UI.messagebox('Độ dày phải >= 3 mm.')
           return false
         end
 
         if inset_mm < 0
-          Sketchup.messagebox('Hụt vào không được âm.')
+          UI.messagebox('Hụt vào không được âm.')
           return false
         end
 
@@ -241,36 +241,36 @@ module PanelPlugin
           # Horizontal shelves: span width, check depth
           net_w = inner_w_mm - 2 * inset_mm
           if net_w < 50.0
-            Sketchup.messagebox("Chiều rộng hữu dụng quá nhỏ: #{net_w.round(1)} mm.")
+            UI.messagebox("Chiều rộng hữu dụng quá nhỏ: #{net_w.round(1)} mm.")
             return false
           end
           if inner_d_mm < 50.0
-            Sketchup.messagebox("Chiều sâu khoang quá nhỏ: #{inner_d_mm.round(1)} mm.")
+            UI.messagebox("Chiều sâu khoang quá nhỏ: #{inner_d_mm.round(1)} mm.")
             return false
           end
           
           spacing_mm = inner_h_mm / (n + 1).to_f
           clear_gap_mm = spacing_mm - thick_mm
           if clear_gap_mm < 30.0
-            Sketchup.messagebox("Không đủ khoảng hở giữa các đợt (cần >= 30mm).")
+            UI.messagebox("Không đủ khoảng hở giữa các đợt (cần >= 30mm).")
             return false
           end
         else
           # Vertical dividers: span depth, check width
           net_d = inner_d_mm - 2 * inset_mm
           if net_d < 50.0
-            Sketchup.messagebox("Chiều sâu hữu dụng quá nhỏ: #{net_d.round(1)} mm.")
+            UI.messagebox("Chiều sâu hữu dụng quá nhỏ: #{net_d.round(1)} mm.")
             return false
           end
           if inner_w_mm < 50.0
-            Sketchup.messagebox("Chiều rộng khoang quá nhỏ: #{inner_w_mm.round(1)} mm.")
+            UI.messagebox("Chiều rộng khoang quá nhỏ: #{inner_w_mm.round(1)} mm.")
             return false
           end
           
           spacing_mm = inner_w_mm / (n + 1).to_f
           clear_gap_mm = spacing_mm - thick_mm
           if clear_gap_mm < 30.0
-            Sketchup.messagebox("Không đủ khoảng hở giữa các vách (cần >= 30mm).")
+            UI.messagebox("Không đủ khoảng hở giữa các vách (cần >= 30mm).")
             return false
           end
         end
@@ -336,7 +336,7 @@ module PanelPlugin
 
         # Success feedback
         dir_text = direction == 'H' ? "đợt ngang" : "vách dọc"
-        Sketchup.messagebox(
+        UI.messagebox(
           "✅ Đã tạo #{n} #{dir_text} thành công!\n\n" \
           "  Độ dày: #{thick_mm} mm\n" \
           "  Hụt vào mỗi bên: #{inset_mm} mm"

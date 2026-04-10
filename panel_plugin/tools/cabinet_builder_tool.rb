@@ -475,7 +475,10 @@ module PanelPlugin
         # Giảm số lượng entity, xóa cạnh dư, chuẩn hóa normals
         # =========================================================================
         begin
-          PanelCore::Geometry::Cleaner.clean!(grp)
+          success = PanelCore::Geometry::Cleaner.clean!(grp)
+          unless success
+            puts "[CabinetBuilder] Warning: Geometry cleaning failed for #{spec[:name]} (returned false)"
+          end
         rescue StandardError => e
           # Log lỗi nhưng không làm dừng quá trình tạo tủ
           puts "[CabinetBuilder] Warning: Geometry cleaning failed for #{spec[:name]}: #{e.message}"

@@ -21,7 +21,7 @@ module PanelPlugin
       ].freeze
 
       def self.run
-        thickness_default = @@last_thickness || Sketchup.read_default('panel_plugin', 'default_thickness', 18.0)
+        thickness_default = @@last_thickness || UI.read_default('panel_plugin', 'default_thickness', 18.0)
         
         prompts  = ['Chiều dài (mm):', 'Chiều rộng (mm):', 'Chiều dày (mm):', 'Tên cấu kiện:', 'Mặt phẳng ván:']
         defaults = [
@@ -47,7 +47,7 @@ module PanelPlugin
         errors << name_error if name_error
         
         if errors.any?
-          Sketchup.messagebox("Lỗi nhập liệu:\n" + errors.join("\n"))
+          UI.messagebox("Lỗi nhập liệu:\n" + errors.join("\n"))
           return
         end
 

@@ -10,14 +10,14 @@ module PanelPlugin
         sel   = model.selection
         faces = sel.grep(Sketchup::Face)
         if faces.empty?
-          Sketchup.messagebox("Vui lòng chọn dải mặt phẳng liên tục cần trải phẳng.")
+          UI.messagebox("Vui lòng chọn dải mặt phẳng liên tục cần trải phẳng.")
           return
         end
 
         # 1. Thu thập thông số từ người dùng (giữ nguyên dialog đơn giản)
         mm = model.materials.map(&:name).reject { |n| n.start_with?('[') }
         mm.unshift('Để Trống') unless mm.include?('Để Trống')
-        sv = Sketchup.read_default('panel_plugin', 'board_material', mm.first)
+        sv = UI.read_default('panel_plugin', 'board_material', mm.first)
         sv = mm.first unless mm.include?(sv)
         
         i1 = ::UI.inputbox(
@@ -34,7 +34,7 @@ module PanelPlugin
         remnant   = i1[3].to_f
         kerf_ratio = (thickness - remnant) / thickness
 
-        Sketchup.write_default('panel_plugin', 'board_material', mat_name)
+        UI.write_default('panel_plugin', 'board_material', mat_name)
 
         model.start_operation("Tiến hành Kerfbend ABF", true)
         begin
@@ -45,7 +45,7 @@ module PanelPlugin
           })
 
           unless flattener_res && flattener_res[:flat_boundary]
-            Sketchup.messagebox("Không thể trải phẳng bề mặt. Vui lòng chọn cung tròn liên tục.")
+            UI.messagebox("Không thể trải phẳng bề mặt. Vui lòng chọn cung tròn liên tục.")
             model.abort_operation
             return
           end
@@ -92,7 +92,7 @@ module PanelPlugin
           sel.add(abf_res[:instance])
         rescue => e
           model.abort_operation
-          Sketchup.messagebox("Lỗi KerfBend: #{e.message}")
+          UI.messagebox("Lỗi KerfBend: #{e.message}")
           puts e.backtrace
         end
       end

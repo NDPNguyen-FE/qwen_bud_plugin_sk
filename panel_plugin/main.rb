@@ -223,17 +223,17 @@ module PanelPlugin
   end
 
   def self.show_settings_dialog
-    default_thickness = Sketchup.read_default('panel_plugin', 'default_thickness', 18.0)
+    default_thickness = UI.read_default('panel_plugin', 'default_thickness', 18.0)
     prompts = ['Chiều dày mặc định (mm):']
     defaults = [default_thickness.to_s]
     input = ::UI.inputbox(prompts, defaults, 'Cài đặt Panel Plugin')
     if input
       thickness = input[0].to_f
       if thickness >= 3.0
-        Sketchup.write_default('panel_plugin', 'default_thickness', thickness)
-        Sketchup.messagebox("Đã lưu chiều dày mặc định: #{thickness}mm")
+        UI.write_default('panel_plugin', 'default_thickness', thickness)
+        UI.messagebox("Đã lưu chiều dày mặc định: #{thickness}mm")
       else
-        Sketchup.messagebox('Chiều dày phải >= 3mm')
+        UI.messagebox('Chiều dày phải >= 3mm')
       end
     end
   end
