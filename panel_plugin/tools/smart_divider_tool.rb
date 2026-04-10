@@ -380,7 +380,7 @@ module PanelPlugin
         end
 
         # Apply ABF Schema attributes
-        PanelPlugin::ABF::Schema.initialize_panel_attributes(grp, 
+        PanelCore::ABF.initialize_panel_attributes(grp, 
           role: role,
           material_code: 'melamine_18',
           thickness: thick_mm

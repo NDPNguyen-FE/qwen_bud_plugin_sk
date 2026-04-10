@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PanelPlugin
+module PanelCore
   module Cabinet
     module Core
       # Lớp điều phối xây dựng tủ
@@ -36,7 +36,7 @@ module PanelPlugin
           build_back_panel(cabinet_group)
           
           # Làm sạch hình học sau khi dựng
-          PanelPlugin::Geometry::Cleaner.clean_group(cabinet_group)
+          PanelCore::Geometry::Cleaner.clean_group(cabinet_group)
           
           cabinet_group
         end
@@ -118,7 +118,7 @@ module PanelPlugin
         
         def set_panel_attributes(panel_group, role, position)
           # Sử dụng ABF Schema để gán attribute chuẩn
-          PanelPlugin::ABF::Schema.initialize_panel_attributes(
+          PanelCore::ABF.initialize_panel_attributes(
             panel_group,
             role: role,
             material_code: 'MDF_18',
