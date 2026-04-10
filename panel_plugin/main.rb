@@ -231,9 +231,9 @@ module PanelPlugin
       thickness = input[0].to_f
       if thickness >= 3.0
         UI.write_default('panel_plugin', 'default_thickness', thickness)
-        UI.messagebox("Đã lưu chiều dày mặc định: #{thickness}mm")
+        Sketchup::UI.messagebox("Đã lưu chiều dày mặc định: #{thickness}mm")
       else
-        UI.messagebox('Chiều dày phải >= 3mm')
+        Sketchup::UI.messagebox('Chiều dày phải >= 3mm')
       end
     end
   end
