@@ -57,6 +57,26 @@ Chi tiết phân rã công việc để xây dựng plugin hỗ trợ dựng nha
   - [ ] Xác định chính xác mặt tiếp xúc giữa 2 tấm (dùng cho tính toán khoan lỗ sau này).
   - [ ] Hỗ trợ serialization/deserialization cấu trúc tủ sang JSON.
 
+### Task 1.5: Refactor ShelfDividerTool & ProductionShelfTool ✅
+- **Mô tả:** Hợp nhất 2 tool riêng biệt thành `SmartDividerTool` duy nhất với khả năng chia cả đợt ngang và vách dọc.
+- **Yêu cầu chi tiết:**
+  - Tham số hóa hướng chia: `direction` ('H' = ngang, 'V' = dọc).
+  - Tự động điều chỉnh logic vẽ hình học theo hướng.
+  - Gán attribute `panel_role` = `shelf_horizontal` hoặc `divider_vertical`.
+  - Giao diện UI thống nhất với toggle chọn hướng.
+- **Tiêu chí hoàn thành (DoD):**
+  - [x] File mới `/workspace/panel_plugin/tools/smart_divider_tool.rb` hoạt động độc lập.
+  - [x] Tool hỗ trợ cả 2 chế độ H/V qua inputbox.
+  - [x] Menu/Toolbar đã loại bỏ 2 tool cũ, chỉ còn 1 nút "Chia Đợt/Vách".
+  - [x] Attribute ABF được gán đúng cho từng loại panel.
+  - [x] Context menu cập nhật hiển thị tool mới.
+- **Trạng thái:** ✅ HOÀN THÀNH
+- **File liên quan:**
+  - `/workspace/panel_plugin/tools/smart_divider_tool.rb` (Mới - hợp nhất từ 2 file cũ)
+  - `/workspace/panel_plugin/main.rb` (Cập nhật menu, toolbar, context menu)
+  - `/workspace/panel_plugin/tools/shelf_divider_tool.rb` (Có thể xóa hoặc giữ để backup)
+  - `/workspace/panel_plugin/tools/production_shelf_tool.rb` (Có thể xóa hoặc giữ để backup)
+
 ---
 
 ## Milestone 2: Auto-Drilling & Smart Joinery
