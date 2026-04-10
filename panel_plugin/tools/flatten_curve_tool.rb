@@ -10,7 +10,7 @@ module PanelPlugin
         sel   = model.selection
         faces = sel.grep(Sketchup::Face)
         if faces.empty?
-          UI.messagebox("Vui lòng chọn dải mặt phẳng liên tục cần trải phẳng.")
+          Sketchup::UI.messagebox("Vui lòng chọn dải mặt phẳng liên tục cần trải phẳng.")
           return
         end
 
@@ -45,7 +45,7 @@ module PanelPlugin
           })
 
           unless flattener_res && flattener_res[:flat_boundary]
-            UI.messagebox("Không thể trải phẳng bề mặt. Vui lòng chọn cung tròn liên tục.")
+            Sketchup::UI.messagebox("Không thể trải phẳng bề mặt. Vui lòng chọn cung tròn liên tục.")
             model.abort_operation
             return
           end
@@ -92,7 +92,7 @@ module PanelPlugin
           sel.add(abf_res[:instance])
         rescue => e
           model.abort_operation
-          UI.messagebox("Lỗi KerfBend: #{e.message}")
+          Sketchup::UI.messagebox("Lỗi KerfBend: #{e.message}")
           puts e.backtrace
         end
       end

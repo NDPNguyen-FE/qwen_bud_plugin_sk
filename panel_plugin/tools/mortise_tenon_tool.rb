@@ -151,7 +151,7 @@ module PanelPlugin
         if res[:success]
           puts "[Joinery] Đã đánh mộng hoàn tất!"
         else
-          UI.messagebox(res[:message])
+          Sketchup::UI.messagebox(res[:message])
         end
       end
     end
