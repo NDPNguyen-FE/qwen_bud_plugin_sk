@@ -42,8 +42,7 @@ module PanelPlugin
     load File.join(PLUGIN_DIR, 'tools', 'flatten_curve_tool.rb')
     load File.join(PLUGIN_DIR, 'tools', 'export_dxf_tool.rb')
     load File.join(PLUGIN_DIR, 'tools', 'cabinet_builder_tool.rb')
-    load File.join(PLUGIN_DIR, 'tools', 'production_shelf_tool.rb')
-    load File.join(PLUGIN_DIR, 'tools', 'shelf_divider_tool.rb')
+    load File.join(PLUGIN_DIR, 'tools', 'smart_divider_tool.rb')
     load File.join(PLUGIN_DIR, 'ui', 'library_panel.rb')
     load File.join(PLUGIN_DIR, 'ui', 'cabinet_builder_panel.rb')
     load File.join(PLUGIN_DIR, 'ui', 'divider_builder_panel.rb')
@@ -91,16 +90,8 @@ module PanelPlugin
       PanelPlugin::UI::CabinetBuilderPanel.show
     end
 
-    menu.add_item('📐 Chia Đợt / Vách Nội Thất') do
-      PanelPlugin::UI::DividerBuilderPanel.show
-    end
-
-    menu.add_item('🎯 Tạo Đợt (Raycast - Production)') do
-      Sketchup.active_model.select_tool(PanelPlugin::Tools::ProductionShelfTool.new)
-    end
-
-    menu.add_item('📏 Chia Đợt Kệ (Shelf Divider)') do
-      Sketchup.active_model.select_tool(PanelPlugin::Tools::ShelfDividerTool.new)
+    menu.add_item('📐 Chia Đợt / Vách Nội Thất (Smart)') do
+      Sketchup.active_model.select_tool(PanelPlugin::Tools::SmartDividerTool.new)
     end
 
     menu.add_item('Thư viện Module') do
@@ -188,22 +179,12 @@ module PanelPlugin
     cmd_lib.large_icon      = File.join(icons_dir, 'library_panel_48.png')
     toolbar.add_item(cmd_lib)
 
-    # Production Shelf Tool button
-    cmd_pshelf = ::UI::Command.new('Tạo Đợt') do
-      Sketchup.active_model.select_tool(PanelPlugin::Tools::ProductionShelfTool.new)
+    # Smart Divider Tool button (replaces Production Shelf & Shelf Divider)
+    cmd_sdiv = ::UI::Command.new('Chia Đợt/Vách') do
+      Sketchup.active_model.select_tool(PanelPlugin::Tools::SmartDividerTool.new)
     end
-    cmd_pshelf.tooltip         = 'Production Shelf Tool - Tạo đợt trong khoang trống'
-    cmd_pshelf.status_bar_text = 'Bấm vào khoang trống bất kỳ để tự động nhận dạng và chia đợt'
-    cmd_pshelf.small_icon      = File.join(icons_dir, 'library_panel_24.png')
-    cmd_pshelf.large_icon      = File.join(icons_dir, 'library_panel_48.png')
-    toolbar.add_item(cmd_pshelf)
-
-    # Shelf Divider Tool button
-    cmd_sdiv = ::UI::Command.new('Chia Đợt Kệ') do
-      Sketchup.active_model.select_tool(PanelPlugin::Tools::ShelfDividerTool.new)
-    end
-    cmd_sdiv.tooltip         = 'Shelf Divider – Chia đợt kệ theo khoang trong'
-    cmd_sdiv.status_bar_text = 'Double-click vào khoang tủ, sau đó click mặt phẳng bên trong để chia đợt kệ'
+    cmd_sdiv.tooltip         = 'Smart Divider – Chia đợt ngang hoặc vách dọc'
+    cmd_sdiv.status_bar_text = 'Click vào khoang tủ để chia đợt (H) hoặc vách (V) thông minh'
     cmd_sdiv.small_icon      = File.join(icons_dir, 'library_panel_24.png')
     cmd_sdiv.large_icon      = File.join(icons_dir, 'library_panel_48.png')
     toolbar.add_item(cmd_sdiv)
@@ -224,8 +205,8 @@ module PanelPlugin
           menu.add_item('Sửa Tủ Base (Edit Cabinet)') do
             PanelPlugin::UI::CabinetBuilderPanel.show(grp)
           end
-          menu.add_item('📏 Chia Đợt Kệ (Shelf Divider)') do
-            Sketchup.active_model.select_tool(PanelPlugin::Tools::ShelfDividerTool.new)
+          menu.add_item('📐 Chia Đợt / Vách (Smart)') do
+            Sketchup.active_model.select_tool(PanelPlugin::Tools::SmartDividerTool.new)
           end
         end
       end
