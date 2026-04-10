@@ -26,7 +26,7 @@ module PanelPlugin
       end
 
       def update_status
-        Sketchup::set_status_text("Cắt Cạnh Góc (Fillet/Chamfer). Click vào CẠNH GÓC dọc của ván để chọn, sau đó nhập kích thước.", SB_PROMPT)
+        Sketchup.active_model.set_status_text("Cắt Cạnh Góc (Fillet/Chamfer). Click vào CẠNH GÓC dọc của ván để chọn, sau đó nhập kích thước.", SB_PROMPT)
       end
 
       def onMouseMove(flags, x, y, view)
