@@ -18,6 +18,10 @@ module PanelPlugin
     load File.join(PLUGIN_DIR, 'panel_core', 'attribute_manager.rb')
     load File.join(PLUGIN_DIR, 'panel_core', 'component_manager.rb')
     load File.join(PLUGIN_DIR, 'panel_core', 'undo_wrapper.rb')
+    
+    # ABF Integration - Schema chuẩn hóa thuộc tính
+    load File.join(PLUGIN_DIR, '..', 'lib', 'abf', 'schema.rb')
+    
     load File.join(PLUGIN_DIR, 'core', 'groove_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'kerf_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'joinery_engine.rb')
