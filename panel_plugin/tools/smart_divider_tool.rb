@@ -98,10 +98,7 @@ module PanelPlugin
       private
 
       def _update_statusbar
-        Sketchup.active_model.set_status_text(
-          'Chia Đợt/Vách: click vào mặt phẳng bên trong khoang tủ  |  [Esc] Thoát',
-          SB_PROMPT
-        )
+        Sketchup.status_text = 'Chia Đợt/Vách: click vào mặt phẳng bên trong khoang tủ  |  [Esc] Thoát'
       end
 
       # ── STEP 1: entry point after a face is picked ────────────────────────
