@@ -14,7 +14,7 @@ module PanelPlugin
         sel = model.selection.select { |e| e.is_a?(Sketchup::Face) }
 
         if sel.empty?
-          UI.messagebox("Vui lòng dùng công cụ Select để chọn ít nhất một Mặt phẳng (Face) 2D trước khi tạo ván.")
+          Sketchup::UI.messagebox("Vui lòng dùng công cụ Select để chọn ít nhất một Mặt phẳng (Face) 2D trước khi tạo ván.")
           return
         end
 
@@ -31,7 +31,7 @@ module PanelPlugin
         push_up = input[1] == 'Yes'
 
         if t_mm < 3.0
-          UI.messagebox('Chiều dày phải >= 3mm.')
+          Sketchup::UI.messagebox('Chiều dày phải >= 3mm.')
           return
         end
 
