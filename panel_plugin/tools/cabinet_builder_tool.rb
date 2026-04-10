@@ -75,21 +75,21 @@ module PanelPlugin
         
         cabinet_group = builder.build
         
-        # Cập nhật metadata bổ sung từ config
-        cabinet_group.set_attribute('panel_cabinet', 'name', cfg[:name])
-        cabinet_group.set_attribute('panel_cabinet', 'style', cfg[:style].to_s)
-        cabinet_group.set_attribute('panel_cabinet', 'has_back', cfg[:has_back])
-        cabinet_group.set_attribute('panel_cabinet', 'has_top', cfg[:has_top])
-        cabinet_group.set_attribute('panel_cabinet', 'door_gap_top', cfg[:door_gap_top])
-        cabinet_group.set_attribute('panel_cabinet', 'door_gap_bot', cfg[:door_gap_bot])
-        cabinet_group.set_attribute('panel_cabinet', 'door_gap_l', cfg[:door_gap_l])
-        cabinet_group.set_attribute('panel_cabinet', 'door_gap_r', cfg[:door_gap_r])
-        cabinet_group.set_attribute('panel_cabinet', 'num_doors', cfg[:num_doors])
-        cabinet_group.set_attribute('panel_cabinet', 'toe_kick_height', cfg[:toe_kick_height])
-        cabinet_group.set_attribute('panel_cabinet', 'toe_kick_depth', cfg[:toe_kick_depth])
-        cabinet_group.set_attribute('panel_cabinet', 'floor_raise', cfg[:floor_raise])
-        cabinet_group.set_attribute('panel_cabinet', 'back_groove_depth', cfg[:back_groove_depth])
-        cabinet_group.set_attribute('panel_cabinet', 'back_groove_offset', cfg[:back_groove_offset])
+        # Cập nhật metadata bổ sung từ config (sử dụng ABF Schema)
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :cabinet_name, cfg[:name])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :style, cfg[:style].to_s)
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :has_back, cfg[:has_back])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :has_top, cfg[:has_top])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :door_gap_top, cfg[:door_gap_top])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :door_gap_bot, cfg[:door_gap_bot])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :door_gap_l, cfg[:door_gap_l])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :door_gap_r, cfg[:door_gap_r])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :num_doors, cfg[:num_doors])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :toe_kick_height, cfg[:toe_kick_height])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :toe_kick_depth, cfg[:toe_kick_depth])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :floor_raise, cfg[:floor_raise])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :back_groove_depth, cfg[:back_groove_depth])
+        PanelCore::ABF.set_cabinet_attribute(cabinet_group, :back_groove_offset, cfg[:back_groove_offset])
         
         cabinet_group
       end
