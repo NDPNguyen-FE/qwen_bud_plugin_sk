@@ -62,7 +62,40 @@ module PanelPlugin
       end
 
       # =========================================================================
-      # Core: tính toán tất cả specs theo kết cấu thi công
+      # Core: Sử dụng Cabinet::Core::Builder để xây dựng tủ (Refactored)
+      # =========================================================================
+      def self._do_build(cfg, target_cabinet_id = nil)
+        # Sử dụng Builder mới đã refactor
+        builder = PanelPlugin::Cabinet::Core::Builder.new(
+          width: cfg[:width],
+          height: cfg[:height],
+          depth: cfg[:depth],
+          thickness: cfg[:thickness]
+        )
+        
+        cabinet_group = builder.build
+        
+        # Cập nhật metadata bổ sung từ config
+        cabinet_group.set_attribute('panel_cabinet', 'name', cfg[:name])
+        cabinet_group.set_attribute('panel_cabinet', 'style', cfg[:style].to_s)
+        cabinet_group.set_attribute('panel_cabinet', 'has_back', cfg[:has_back])
+        cabinet_group.set_attribute('panel_cabinet', 'has_top', cfg[:has_top])
+        cabinet_group.set_attribute('panel_cabinet', 'door_gap_top', cfg[:door_gap_top])
+        cabinet_group.set_attribute('panel_cabinet', 'door_gap_bot', cfg[:door_gap_bot])
+        cabinet_group.set_attribute('panel_cabinet', 'door_gap_l', cfg[:door_gap_l])
+        cabinet_group.set_attribute('panel_cabinet', 'door_gap_r', cfg[:door_gap_r])
+        cabinet_group.set_attribute('panel_cabinet', 'num_doors', cfg[:num_doors])
+        cabinet_group.set_attribute('panel_cabinet', 'toe_kick_height', cfg[:toe_kick_height])
+        cabinet_group.set_attribute('panel_cabinet', 'toe_kick_depth', cfg[:toe_kick_depth])
+        cabinet_group.set_attribute('panel_cabinet', 'floor_raise', cfg[:floor_raise])
+        cabinet_group.set_attribute('panel_cabinet', 'back_groove_depth', cfg[:back_groove_depth])
+        cabinet_group.set_attribute('panel_cabinet', 'back_groove_offset', cfg[:back_groove_offset])
+        
+        cabinet_group
+      end
+
+      # =========================================================================
+      # Core: tính toán tất cả specs theo kết cấu thi công (Giữ cho BOM)
       # =========================================================================
       def self._build_specs(cfg)
         w   = cfg[:width].to_f
@@ -434,6 +467,20 @@ module PanelPlugin
         stz = PanelCore::ComponentManager.mm_to_su(tz)
         tr = Geom::Transformation.translation(Geom::Vector3d.new(stx, sty, stz))
         grp.transform!(tr)
+        
+        # =========================================================================
+        # TASK 1.2: GEOMETRY CLEANING - Làm sạch hình học sau khi tạo
+        # =========================================================================
+        # Đảm bảo panel có hình học tối ưu, sẵn sàng cho DXF export và CNC
+        # Giảm số lượng entity, xóa cạnh dư, chuẩn hóa normals
+        # =========================================================================
+        begin
+          PanelPlugin::Geometry::Cleaner.clean!(grp)
+        rescue StandardError => e
+          # Log lỗi nhưng không làm dừng quá trình tạo tủ
+          puts "[CabinetBuilder] Warning: Geometry cleaning failed for #{spec[:name]}: #{e.message}"
+        end
+        
         grp
       end
     end
