@@ -6,9 +6,9 @@ module PanelPlugin
   module Tools
     class FilletTool
       def initialize
-        @radius_mm = Sketchup.read_default('panel_plugin', 'default_fillet_radius', 50.0).to_f
-        @segments = Sketchup.read_default('panel_plugin', 'default_fillet_segments', 12).to_i
-        @cut_type = Sketchup.read_default('panel_plugin', 'default_cut_type', 'Bo tròn lồi (Fillet)')
+        @radius_mm = UI.read_default('panel_plugin', 'default_fillet_radius', 50.0).to_f
+        @segments = UI.read_default('panel_plugin', 'default_fillet_segments', 12).to_i
+        @cut_type = UI.read_default('panel_plugin', 'default_cut_type', 'Bo tròn lồi (Fillet)')
         @hover_edge = nil
         @hover_instance = nil
       end
@@ -92,15 +92,15 @@ module PanelPlugin
             @cut_type = c_type
             @radius_mm = r
             @segments = s
-            Sketchup.write_default('panel_plugin', 'default_cut_type', c_type)
-            Sketchup.write_default('panel_plugin', 'default_fillet_radius', r)
-            Sketchup.write_default('panel_plugin', 'default_fillet_segments', s)
+            UI.write_default('panel_plugin', 'default_cut_type', c_type)
+            UI.write_default('panel_plugin', 'default_fillet_radius', r)
+            UI.write_default('panel_plugin', 'default_fillet_segments', s)
             
             do_fillet(@hover_instance, @hover_edge, @segments, @cut_type, @radius_mm)
             
             Sketchup.active_model.select_tool(nil)
           else
-            Sketchup.messagebox("Kích thước phải > 0 và Segments phải hợp lệ")
+            UI.messagebox("Kích thước phải > 0 và Segments phải hợp lệ")
           end
         end
       end
@@ -151,7 +151,7 @@ module PanelPlugin
         end
         
         unless profile_face
-          Sketchup.messagebox("Không tìm thấy mặt phẳng đầu hồi (Profile Face) thích hợp ở 2 đầu cạnh này để bo.")
+          UI.messagebox("Không tìm thấy mặt phẳng đầu hồi (Profile Face) thích hợp ở 2 đầu cạnh này để bo.")
           return
         end
         
@@ -159,7 +159,7 @@ module PanelPlugin
         
         edges_on_profile = v_top.edges.select { |e| e.faces.include?(profile_face) }
         if edges_on_profile.length < 2 
-          Sketchup.messagebox("Cạnh này không hợp lệ (không tạo thành góc đỉnh trên mặt).")
+          UI.messagebox("Cạnh này không hợp lệ (không tạo thành góc đỉnh trên mặt).")
           return
         end
         
@@ -170,7 +170,7 @@ module PanelPlugin
         
         angle = vec1.angle_between(vec2)
         if angle <= 0.01 || angle > 179.degrees
-           Sketchup.messagebox("Góc quá thẳng, không thể tác động.")
+           UI.messagebox("Góc quá thẳng, không thể tác động.")
            return
         end
         
@@ -181,7 +181,7 @@ module PanelPlugin
         end
         
         if d > vec1.length || d > vec2.length
-          Sketchup.messagebox("Kích thước #{size_mm}mm quá lớn so với độ dài của cạnh mặt hồi!")
+          UI.messagebox("Kích thước #{size_mm}mm quá lớn so với độ dài của cạnh mặt hồi!")
           return
         end
         

@@ -14,12 +14,12 @@ module PanelPlugin
         sel = model.selection.select { |e| e.is_a?(Sketchup::Face) }
 
         if sel.empty?
-          Sketchup.messagebox("Vui lòng dùng công cụ Select để chọn ít nhất một Mặt phẳng (Face) 2D trước khi tạo ván.")
+          UI.messagebox("Vui lòng dùng công cụ Select để chọn ít nhất một Mặt phẳng (Face) 2D trước khi tạo ván.")
           return
         end
 
         # Hỏi độ dày muốn tạo
-        thickness_default = Sketchup.read_default('panel_plugin', 'default_thickness', 18.0)
+        thickness_default = UI.read_default('panel_plugin', 'default_thickness', 18.0)
         prompts = ['Chiều dày (mm):', 'Tạo tấm mặt hướng lên? (Yes/No)']
         defaults = [thickness_default.to_s, 'Yes']
         list = ['', 'Yes|No']
@@ -31,11 +31,11 @@ module PanelPlugin
         push_up = input[1] == 'Yes'
 
         if t_mm < 3.0
-          Sketchup.messagebox('Chiều dày phải >= 3mm.')
+          UI.messagebox('Chiều dày phải >= 3mm.')
           return
         end
 
-        Sketchup.write_default('panel_plugin', 'default_thickness', t_mm)
+        UI.write_default('panel_plugin', 'default_thickness', t_mm)
 
         PanelCore::UndoWrapper.run('Ván từ Mặt phẳng') do
           # Duplicate array of faces since modifying them alters the selection/entities

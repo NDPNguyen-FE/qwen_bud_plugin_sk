@@ -12,7 +12,7 @@ module PanelCore
 
     # Default attribute set for a new panel
     def self.default_attributes(name = nil)
-      thickness = Sketchup.read_default('panel_plugin', 'default_thickness', 18.0)
+      thickness = UI.read_default('panel_plugin', 'default_thickness', 18.0)
       {
         'part_name'       => name || 'Panel',
         'material_id'     => 'melamine_18',
