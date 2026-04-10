@@ -73,18 +73,10 @@ module PanelPlugin
         face = @ip.face
         point = @ip.position
 
-<<<<<<< HEAD
-        unless face
-          ::UI.messagebox(
-            "Không nhận được mặt phẳng.\n\n" \
-            "Hướng dẫn: Kích hoạt tool rồi click thẳng vào một mặt phẳng " \
-            "thuộc khoang trống bên trong tủ (không cần double-click)."
-=======
         unless face && point
           Sketchup::UI.messagebox(
             "Không nhận được mặt phẳng.\n\n" \
             "Hướng dẫn: Click vào bất kỳ mặt nào của tủ để chia ngăn."
->>>>>>> ff650c8 (update branch)
           )
           return
         end
@@ -108,16 +100,6 @@ module PanelPlugin
       end
 
       # ── STEP 1: entry point after a face is picked ────────────────────────
-<<<<<<< HEAD
-      def _process(face)
-        # 1a. Find the container group/component
-        container = _enclosing_container
-        unless container
-          ::UI.messagebox(
-            "Không tìm thấy khoang tủ.\n\n" \
-            "• Double-click vào Group/Component của tủ để vào bên trong.\n" \
-            "• Kích hoạt lại tool rồi click vào mặt phẳng trong khoang."
-=======
       def _process(face, point)
         # 1a. Use raycasting to detect enclosure boundaries
         enclosure = _detect_enclosure_by_raycasting(face, point)
@@ -126,25 +108,12 @@ module PanelPlugin
             "Không tìm thấy khoang tủ bao quanh.\n\n" \
             "• Click vào mặt trong của tủ (sàn, vách hông, nóc, hậu).\n" \
             "• Đảm bảo tủ có đủ 6 mặt bao kín."
->>>>>>> ff650c8 (update branch)
           )
           return
         end
 
-<<<<<<< HEAD
-        # 1b. Build local-space bounding box
-        inner = _compute_inner_bounds(container)
-        unless inner
-          ::UI.messagebox(
-            "Không xác định được kích thước khoang trong.\n" \
-            "Hãy chắc chắn group có ít nhất các mặt phẳng (sàn, vách hông, nóc)."
-          )
-          return
-        end
-=======
         container = enclosure[:container]
         inner = enclosure[:bounds]
->>>>>>> ff650c8 (update branch)
 
         inner_w_su = inner[:max_x] - inner[:min_x]
         inner_d_su = inner[:max_y] - inner[:min_y]
@@ -188,21 +157,21 @@ module PanelPlugin
         end
       end
 
-      # ── STEP 2: Raycasting to detect enclosure boundaries ─────────────────
-      def _detect_enclosure_by_raycasting(face, point)
-        model = Sketchup.active_model
-        behavior = Sketchup::RayBehavior.new
+      # ── STEP 2: resolve the host container from the active edit context ───
+      def _enclosing_container
+        # Ưu tiên lấy từ instance_path của chính điểm click (không cần double-click)
+        path = @ip.instance_path.to_a
         
-        # Find container from the clicked face's path
-        container = nil
-        path = face.path
-        if path && !path.empty?
-          path.reverse_each do |e|
-            if e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
-              container = e
-              break
-            end
-          end
+        # Fallback: nếu bằng 1 cách nào đó nó rỗng, thử active_path
+        if path.nil? || path.empty? || (path.size == 1 && path.first.is_a?(Sketchup::Face))
+          active = Sketchup.active_model.active_path
+          path = active.to_a if active
+        end
+
+        return nil if path.nil? || path.empty?
+
+        path.reverse_each do |e|
+          return e if e.is_a?(Sketchup::Group) || e.is_a?(Sketchup::ComponentInstance)
         end
         
         return nil unless container
