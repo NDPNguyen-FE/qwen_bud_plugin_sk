@@ -15,7 +15,7 @@ module PanelCore
         result
       rescue => e
         model.abort_operation
-        ::UI.messagebox("Lỗi: #{e.message}\n\n#{e.backtrace.first(3).join("\n")}")
+        Sketchup.messagebox("Lỗi: #{e.message}\n\n#{e.backtrace.first(3).join("\n")}")
         nil
       end
     end

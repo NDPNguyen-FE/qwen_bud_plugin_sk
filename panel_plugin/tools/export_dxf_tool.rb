@@ -15,7 +15,7 @@ module PanelPlugin
         comps = sel.select { |e| e.is_a?(Sketchup::ComponentInstance) && e.name.to_s.start_with?('CNC_') }
 
         if comps.empty?
-          ::UI.messagebox("Vui lòng chọn ít nhất 1 Component CNC_ để xuất DXF.")
+          Sketchup.messagebox("Vui lòng chọn ít nhất 1 Component CNC_ để xuất DXF.")
           return
         end
 
@@ -33,7 +33,7 @@ module PanelPlugin
           end
         end
 
-        ::UI.messagebox("Xuất DXF hoàn tất:\n\n#{results.join("\n")}")
+        Sketchup.messagebox("Xuất DXF hoàn tất:\n\n#{results.join("\n")}")
       end
 
       def self.export_component(comp, path)
