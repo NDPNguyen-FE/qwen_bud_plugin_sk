@@ -58,7 +58,7 @@ module ShelfTool
       spacing = height.to_f / (n + 1)
 
       if spacing < 10.mm
-        UI.messagebox("Not enough space")
+        Sketchup.messagebox("Not enough space")
         return
       end
 

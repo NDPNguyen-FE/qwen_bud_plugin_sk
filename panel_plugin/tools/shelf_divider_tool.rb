@@ -75,7 +75,7 @@ module PanelPlugin
         face = @ip.face
 
         unless face
-          UI.messagebox(
+          Sketchup.messagebox(
             "Không nhận được mặt phẳng.\n\n" \
             "Hướng dẫn: Double-click vào khoang tủ để vào edit-mode,\n" \
             "sau đó click vào một mặt phẳng bên trong."
@@ -109,7 +109,7 @@ module PanelPlugin
         # 1a. Find the container group/component
         container = _enclosing_container
         unless container
-          UI.messagebox(
+          Sketchup.messagebox(
             "Không tìm thấy khoang tủ.\n\n" \
             "• Double-click vào Group/Component của tủ để vào bên trong.\n" \
             "• Kích hoạt lại tool rồi click vào mặt phẳng trong khoang."
@@ -120,7 +120,7 @@ module PanelPlugin
         # 1b. Build local-space bounding box
         inner = _compute_inner_bounds(container)
         unless inner
-          UI.messagebox(
+          Sketchup.messagebox(
             "Không xác định được kích thước khoang trong.\n" \
             "Hãy chắc chắn group có ít nhất các mặt phẳng (sàn, vách hông, nóc)."
           )
@@ -217,28 +217,28 @@ module PanelPlugin
         inner_h_mm = _su2mm(inner_h_su)
 
         if n <= 0
-          UI.messagebox('Số đợt kệ phải lớn hơn 0.')
+          Sketchup.messagebox('Số đợt kệ phải lớn hơn 0.')
           return false
         end
 
         if n > 50
-          UI.messagebox('Số đợt kệ không được vượt quá 50.')
+          Sketchup.messagebox('Số đợt kệ không được vượt quá 50.')
           return false
         end
 
         if shelf_t_mm < 3.0
-          UI.messagebox('Độ dày đợt kệ phải >= 3 mm.')
+          Sketchup.messagebox('Độ dày đợt kệ phải >= 3 mm.')
           return false
         end
 
         if inset_mm < 0
-          UI.messagebox('Hụt vào không được âm.')
+          Sketchup.messagebox('Hụt vào không được âm.')
           return false
         end
 
         net_w = inner_w_mm - 2 * inset_mm
         if net_w < 50.0
-          UI.messagebox(
+          Sketchup.messagebox(
             "Chiều rộng hữu dụng sau khi trừ hụt quá nhỏ: #{net_w.round(1)} mm.\n" \
             "Giảm giá trị 'Hụt vào mỗi bên'."
           )
@@ -246,7 +246,7 @@ module PanelPlugin
         end
 
         if inner_d_mm < 50.0
-          UI.messagebox("Chiều sâu khoang quá nhỏ: #{inner_d_mm.round(1)} mm.")
+          Sketchup.messagebox("Chiều sâu khoang quá nhỏ: #{inner_d_mm.round(1)} mm.")
           return false
         end
 
@@ -256,7 +256,7 @@ module PanelPlugin
         min_gap_mm     = 30.0
 
         if clear_gap_mm < min_gap_mm
-          UI.messagebox(
+          Sketchup.messagebox(
             "Không đủ khoảng hở giữa các đợt kệ!\n\n" \
             "  Khoảng hở thực tế: #{clear_gap_mm.round(1)} mm\n" \
             "  Tối thiểu yêu cầu: #{min_gap_mm} mm\n\n" \
@@ -343,7 +343,7 @@ module PanelPlugin
 
         # Success feedback
         spacing_mm = _su2mm(spacing_su).round(1)
-        UI.messagebox(
+        Sketchup.messagebox(
           "✅ Đã tạo #{n} đợt kệ thành công!\n\n" \
           "  Kích thước đợt: #{shelf_w_mm} × #{shelf_d_mm} × #{shelf_t_mm} mm\n" \
           "  Khoảng cách (tâm – tâm): #{spacing_mm} mm\n" \

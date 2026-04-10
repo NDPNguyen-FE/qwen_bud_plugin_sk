@@ -17,10 +17,10 @@ module PanelPlugin
             sel = [active]
           else
             if model.selection.empty?
-              ::UI.messagebox("Bạn chưa chọn đối tượng nào.\nVui lòng chọn ít nhất một tấm ván (Group hoặc Component) trên màn hình.")
+              Sketchup.messagebox("Bạn chưa chọn đối tượng nào.\nVui lòng chọn ít nhất một tấm ván (Group hoặc Component) trên màn hình.")
             else
               types = model.selection.map { |e| e.class.name.split('::').last }.uniq.join(", ")
-              ::UI.messagebox("Bạn đang chọn đối tượng loại: #{types}.\nNếu bạn đang ở bên trong Group, hãy nhấn Escape để thoát ra ngoài trước, rồi click chọn Group/Component từ bên ngoài.")
+              Sketchup.messagebox("Bạn đang chọn đối tượng loại: #{types}.\nNếu bạn đang ở bên trong Group, hãy nhấn Escape để thoát ra ngoài trước, rồi click chọn Group/Component từ bên ngoài.")
             end
             return
           end
@@ -47,7 +47,7 @@ module PanelPlugin
 
         new_t_mm = input[0].to_f
         if new_t_mm < 3.0
-          ::UI.messagebox("Do day phai >= 3mm")
+          Sketchup.messagebox("Do day phai >= 3mm")
           return
         end
 

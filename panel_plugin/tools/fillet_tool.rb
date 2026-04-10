@@ -100,7 +100,7 @@ module PanelPlugin
             
             Sketchup.active_model.select_tool(nil)
           else
-            ::UI.messagebox("Kích thước phải > 0 và Segments phải hợp lệ")
+            Sketchup.messagebox("Kích thước phải > 0 và Segments phải hợp lệ")
           end
         end
       end
@@ -151,7 +151,7 @@ module PanelPlugin
         end
         
         unless profile_face
-          ::UI.messagebox("Không tìm thấy mặt phẳng đầu hồi (Profile Face) thích hợp ở 2 đầu cạnh này để bo.")
+          Sketchup.messagebox("Không tìm thấy mặt phẳng đầu hồi (Profile Face) thích hợp ở 2 đầu cạnh này để bo.")
           return
         end
         
@@ -159,7 +159,7 @@ module PanelPlugin
         
         edges_on_profile = v_top.edges.select { |e| e.faces.include?(profile_face) }
         if edges_on_profile.length < 2 
-          ::UI.messagebox("Cạnh này không hợp lệ (không tạo thành góc đỉnh trên mặt).")
+          Sketchup.messagebox("Cạnh này không hợp lệ (không tạo thành góc đỉnh trên mặt).")
           return
         end
         
@@ -170,7 +170,7 @@ module PanelPlugin
         
         angle = vec1.angle_between(vec2)
         if angle <= 0.01 || angle > 179.degrees
-           ::UI.messagebox("Góc quá thẳng, không thể tác động.")
+           Sketchup.messagebox("Góc quá thẳng, không thể tác động.")
            return
         end
         
@@ -181,7 +181,7 @@ module PanelPlugin
         end
         
         if d > vec1.length || d > vec2.length
-          ::UI.messagebox("Kích thước #{size_mm}mm quá lớn so với độ dài của cạnh mặt hồi!")
+          Sketchup.messagebox("Kích thước #{size_mm}mm quá lớn so với độ dài của cạnh mặt hồi!")
           return
         end
         

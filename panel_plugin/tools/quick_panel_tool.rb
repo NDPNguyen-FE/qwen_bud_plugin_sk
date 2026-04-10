@@ -47,7 +47,7 @@ module PanelPlugin
         errors << name_error if name_error
         
         if errors.any?
-          ::UI.messagebox("Lỗi nhập liệu:\n" + errors.join("\n"))
+          Sketchup.messagebox("Lỗi nhập liệu:\n" + errors.join("\n"))
           return
         end
 
