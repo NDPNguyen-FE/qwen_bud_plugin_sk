@@ -22,6 +22,9 @@ module PanelPlugin
     # ABF Integration - Schema chuẩn hóa thuộc tính
     load File.join(PLUGIN_DIR, '..', 'lib', 'abf', 'schema.rb')
     
+    # Geometry Cleaner - Làm sạch hình học cho CNC
+    load File.join(PLUGIN_DIR, '..', 'lib', 'geometry', 'cleaner.rb')
+    
     load File.join(PLUGIN_DIR, 'core', 'groove_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'kerf_engine.rb')
     load File.join(PLUGIN_DIR, 'core', 'joinery_engine.rb')

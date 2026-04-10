@@ -434,6 +434,20 @@ module PanelPlugin
         stz = PanelCore::ComponentManager.mm_to_su(tz)
         tr = Geom::Transformation.translation(Geom::Vector3d.new(stx, sty, stz))
         grp.transform!(tr)
+        
+        # =========================================================================
+        # TASK 1.2: GEOMETRY CLEANING - Làm sạch hình học sau khi tạo
+        # =========================================================================
+        # Đảm bảo panel có hình học tối ưu, sẵn sàng cho DXF export và CNC
+        # Giảm số lượng entity, xóa cạnh dư, chuẩn hóa normals
+        # =========================================================================
+        begin
+          PanelPlugin::Geometry::Cleaner.clean!(grp)
+        rescue StandardError => e
+          # Log lỗi nhưng không làm dừng quá trình tạo tủ
+          puts "[CabinetBuilder] Warning: Geometry cleaning failed for #{spec[:name]}: #{e.message}"
+        end
+        
         grp
       end
     end
