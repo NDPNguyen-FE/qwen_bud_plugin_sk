@@ -385,18 +385,6 @@ module PanelPlugin
           material_code: 'melamine_18',
           thickness: thick_mm
         )
-        
-        # Additional metadata
-        d = grp.attribute_dictionary('panel_core', true)
-        d['part_name']       = grp.name
-        d['role']            = role
-        d['assembly_seq']    = idx
-        d['length_mm']       = dim1_mm
-        d['depth_mm']        = dim2_mm
-        d['thickness_mm']    = thick_mm
-        d['grain_direction'] = direction == 'H' ? 'ngang' : 'doc'
-        d['edge_front']      = true
-        d['created_at']      = Time.now.to_i
       end
 
       # ── Unit helpers ──────────────────────────────────────────────────────

@@ -44,14 +44,19 @@ module PanelCore
         private
         
         def set_cabinet_metadata(group)
-          group.set_attribute('panel_cabinet', 'width', @calculator.width)
-          group.set_attribute('panel_cabinet', 'height', @calculator.height)
-          group.set_attribute('panel_cabinet', 'depth', @calculator.depth)
-          group.set_attribute('panel_cabinet', 'thickness', @thickness)
-          group.set_attribute('panel_cabinet', 'interior_width', @calculator.interior_width)
-          group.set_attribute('panel_cabinet', 'interior_height', @calculator.interior_height)
-          group.set_attribute('panel_cabinet', 'type', 'basic_cabinet')
-          group.set_attribute('panel_cabinet', 'created_at', Time.now.to_s)
+          # Sử dụng ABF Schema để chuẩn hóa metadata cabinet
+          config = {
+            width_mm: @calculator.width,
+            height_mm: @calculator.height,
+            depth_mm: @calculator.depth,
+            thickness_mm: @thickness,
+            interior_width: @calculator.interior_width,
+            interior_height: @calculator.interior_height,
+            cabinet_type: :basic_cabinet,
+            created_at: Time.now.to_i
+          }
+          
+          PanelCore::ABF.initialize_cabinet_attributes(group, config: config)
         end
         
         def build_side_panels(group)
@@ -125,9 +130,8 @@ module PanelCore
             thickness: @thickness
           )
           
-          # Thêm thông tin vị trí
-          panel_group.set_attribute('panel_core', 'position', position)
-          panel_group.set_attribute('panel_core', 'cabinet_ref', 'self')
+          # Thêm thông tin vị trí (sử dụng ABF helper method)
+          PanelCore::ABF.set_panel_attribute(panel_group, :panel_uuid, "#{PanelCore::ABF.get_panel_attribute(panel_group, :panel_uuid)}_#{position}")
         end
       end
     end

@@ -7,7 +7,7 @@ module PanelCore
   module ABF
     # --- PREFIXES ---
     # Sử dụng prefix để tránh xung đột với các plugin khác hoặc attribute mặc định của SketchUp
-    PREFIX = 'pp_abf_'
+    PREFIX = 'pp_abf_'.freeze
     
     # --- CORE IDENTIFIERS (Định danh cốt lõi) ---
     # Các trường này giúp ABF biết tấm ván này là gì, thuộc nhóm nào
@@ -69,11 +69,44 @@ module PanelCore
       dfm_message: "#{PREFIX}dfm_message",
     }.freeze
 
+    # --- CABINET METADATA (Metadata cho cabinet container) ---
+    # Các trường dành riêng cho Group chứa toàn bộ tủ
+    CABINET_KEYS = {
+      cabinet_id: "#{PREFIX}cabinet_id",
+      cabinet_name: "#{PREFIX}cabinet_name",
+      cabinet_type: "#{PREFIX}cabinet_type", # :base, :wall, :tall
+      width_mm: "#{PREFIX}width_mm",
+      height_mm: "#{PREFIX}height_mm",
+      depth_mm: "#{PREFIX}depth_mm",
+      thickness_mm: "#{PREFIX}thickness_mm",
+      back_thickness_mm: "#{PREFIX}back_thickness_mm",
+      style: "#{PREFIX}style",
+      has_back: "#{PREFIX}has_back",
+      has_top: "#{PREFIX}has_top",
+      num_doors: "#{PREFIX}num_doors",
+      door_gap_top: "#{PREFIX}door_gap_top",
+      door_gap_bot: "#{PREFIX}door_gap_bot",
+      door_gap_l: "#{PREFIX}door_gap_l",
+      door_gap_r: "#{PREFIX}door_gap_r",
+      toe_kick_height: "#{PREFIX}toe_kick_height",
+      toe_kick_depth: "#{PREFIX}toe_kick_depth",
+      floor_raise: "#{PREFIX}floor_raise",
+      back_groove_depth: "#{PREFIX}back_groove_depth",
+      back_groove_offset: "#{PREFIX}back_groove_offset",
+      created_at: "#{PREFIX}created_at",
+      is_parametric: "#{PREFIX}is_parametric",
+    }.freeze
+
     # --- HELPER METHODS ---
     
     # Trả về toàn bộ keys cần thiết để khởi tạo một panel chuẩn
     def self.all_keys
       ATTRIBUTE_KEYS.values + EDGE_KEYS.values + PROCESSING_KEYS.values
+    end
+
+    # Trả về toàn bộ keys cho cabinet metadata
+    def self.all_cabinet_keys
+      CABINET_KEYS.values
     end
 
     # Kiểm tra xem một entity đã có đầy đủ attribute chưa
@@ -98,7 +131,7 @@ module PanelCore
     # @param material_code [String] Mã vật liệu
     # @param thickness [Numeric] Độ dày
     def self.initialize_panel_attributes(entity, role:, material_code:, thickness:)
-      dict = entity.attribute_dictionary('PanelPlugin', true)
+      dict = entity.attribute_dictionary('PanelCore', true)
       
       # Core Identifiers
       dict[ATTRIBUTE_KEYS[:panel_uuid]] = generate_uuid
@@ -125,11 +158,69 @@ module PanelCore
       dict
     end
 
+    # Khởi tạo attribute dictionary cho cabinet container
+    # @param entity [Sketchup::Group] Group chứa toàn bộ tủ
+    # @param config [Hash] Cấu hình tủ
+    def self.initialize_cabinet_attributes(entity, config:)
+      dict = entity.attribute_dictionary('PanelCore', true)
+      
+      CABINET_KEYS.each do |key, attr_name|
+        value = config[key]
+        dict[attr_name] = value unless value.nil?
+      end
+      
+      # Set defaults if not provided
+      dict[CABINET_KEYS[:cabinet_id]] ||= generate_cabinet_id
+      dict[CABINET_KEYS[:created_at]] ||= Time.now.to_i
+      dict[CABINET_KEYS[:is_parametric]] ||= true
+      
+      dict
+    end
+
+    # Lấy giá trị của một attribute panel
+    def self.get_panel_attribute(entity, key)
+      return nil unless entity.attribute_dictionary
+      attr_key = ATTRIBUTE_KEYS[key] || EDGE_KEYS[key] || PROCESSING_KEYS[key]
+      return nil unless attr_key
+      entity.attribute_dictionary[attr_key]
+    end
+
+    # Đặt giá trị cho một attribute panel
+    def self.set_panel_attribute(entity, key, value)
+      dict = entity.attribute_dictionary('PanelCore', true)
+      attr_key = ATTRIBUTE_KEYS[key] || EDGE_KEYS[key] || PROCESSING_KEYS[key]
+      return false unless attr_key
+      dict[attr_key] = value
+      true
+    end
+
+    # Lấy giá trị của một attribute cabinet
+    def self.get_cabinet_attribute(entity, key)
+      return nil unless entity.attribute_dictionary
+      attr_key = CABINET_KEYS[key]
+      return nil unless attr_key
+      entity.attribute_dictionary[attr_key]
+    end
+
+    # Đặt giá trị cho một attribute cabinet
+    def self.set_cabinet_attribute(entity, key, value)
+      dict = entity.attribute_dictionary('PanelCore', true)
+      attr_key = CABINET_KEYS[key]
+      return false unless attr_key
+      dict[attr_key] = value
+      true
+    end
+
     private
 
     # Tạo UUID đơn giản cho panel (có thể thay thế bằng SecureRandom nếu cần)
     def self.generate_uuid
       "P_#{Time.now.to_i}_#{rand(1000..9999)}"
+    end
+    
+    # Tạo ID cho cabinet
+    def self.generate_cabinet_id
+      "CAB_#{Time.now.to_i}_#{rand(1000..9999)}"
     end
   end
 end
