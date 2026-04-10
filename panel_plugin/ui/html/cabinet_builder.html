@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cabinet Builder</title>
+  <style>
+    :root {
+      --bg: #0f0f1a;
+      --s: #1a1a2e;
+      --s2: #22223a;
+      --bd: #2e2e50;
+      --ac: #7c82f5;
+      --ac2: #a78bfa;
+      --ok: #34d399;
+      --er: #f87171;
+      --wn: #fbbf24;
+      --tx: #e2e8f0;
+      --mu: #6e748a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--tx);
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hdr {
+      background: linear-gradient(135deg, #1c2d4a, #14142a);
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .hdr-t {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hdr-s {
+      font-size: 11px;
+      color: var(--mu);
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .ctrl {
+      width: 100%;
+      flex-shrink: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--bd);
+      scrollbar-width: thin;
+      scrollbar-color: var(--bd) transparent;
+    }
+
+    .sec {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .sec-t {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--mu);
+      margin-bottom: 9px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sec-t::before {
+      content: '';
+      width: 3px;
+      height: 11px;
+      background: var(--ac);
+      border-radius: 2px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 7px;
+    }
+
+    .lbl {
+      flex: 0 0 115px;
+      font-size: 12px;
+      color: var(--mu);
+    }
+
+    .inp {
+      flex: 1;
+    }
+
+    .unit {
+      font-size: 11px;
+      color: var(--mu);
+      width: 22px;
+      flex-shrink: 0;
+    }
+
+    input[type=text],
+    input[type=number],
+    select {
+      width: 100%;
+      background: var(--s2);
+      border: 1px solid var(--bd);
+      border-radius: 6px;
+      color: var(--tx);
+      padding: 6px 8px;
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--ac);
+    }
+
+    .tog-r {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+
+    .tog-l {
+      font-size: 12px;
+      color: var(--mu);
+    }
+
+    .sw {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .sw input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .sl {
+      position: absolute;
+      inset: 0;
+      background: var(--bd);
+      border-radius: 99px;
+      transition: background .15s;
+      cursor: pointer;
+    }
+
+    .sl::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform .15s;
+    }
+
+    .sw input:checked+.sl {
+      background: var(--ac);
+    }
+
+    .sw input:checked+.sl::before {
+      transform: translateX(16px);
+    }
+
+    .sg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .sb {
+      background: var(--s2);
+      border: 2px solid var(--bd);
+      border-radius: 7px;
+      padding: 7px 5px;
+      text-align: center;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--mu);
+      font-size: 11px;
+      transition: all .15s;
+    }
+
+    .sb:hover {
+      border-color: var(--ac);
+      color: var(--tx);
+    }
+
+    .sb.on {
+      border-color: var(--ac);
+      background: rgba(124, 130, 245, .1);
+      color: var(--ac);
+      font-weight: 700;
+    }
+
+    .si {
+      font-size: 17px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--bd);
+      flex-shrink: 0;
+    }
+
+    .tab {
+      padding: 9px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--mu);
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+    }
+
+    .tab.on {
+      color: var(--ac);
+      border-bottom-color: var(--ac);
+    }
+
+    .pane {
+      flex: 1;
+      overflow: hidden;
+      display: none;
+    }
+
+    .pane.on {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #c3d {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .bom-wrap {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th {
+      background: var(--s2);
+      color: var(--mu);
+      font-weight: 700;
+      padding: 7px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--bd);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(46, 46, 80, .6);
+      vertical-align: top;
+    }
+
+    .footer {
+      border-top: 1px solid var(--bd);
+      padding: 10px 14px;
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      padding: 9px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-p {
+      background: linear-gradient(135deg, var(--ac), var(--ac2));
+      color: #fff;
+      flex: 1;
+      justify-content: center;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--s2);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
+      transition: all .24s;
+      opacity: 0;
+      z-index: 999;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hdr">
+    <span style="font-size:22px">🏗</span>
+    <div>
+      <div class="hdr-t">Parametric Cabinet Builder</div>
+      <div class="hdr-s">Stable 4-Way Gap Version</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="ctrl">
+      <div class="sec">
+        <div class="sec-t">Kích thước ngoài</div>
+        <div class="row"><span class="lbl">Rộng (W)</span>
+          <div class="inp"><input type="number" id="dim-w" value="600" oninput="refresh()"></div><span
+            class="unit">mm</span>
+        </div>
+        <div class="row"><span class="lbl">Sâu (D)</span>
+          <div class="inp"><input type="number" id="dim-d" value="560" oninput="refresh()"></div><span
+            class="unit">mm</span>
+        </div>
+        <div class="row"><span class="lbl">Cao (H)</span>
+          <div class="inp"><input type="number" id="dim-h" value="820" oninput="refresh()"></div><span
+            class="unit">mm</span>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">Vật liệu</div>
+        <div class="row"><span class="lbl">Dày ván</span>
+          <div class="inp"><input type="number" id="mat-thick" value="18" oninput="refresh()"></div>
+        </div>
+        <div class="row"><span class="lbl">Dày hậu</span>
+          <div class="inp"><input type="number" id="back-thick" value="9" oninput="refresh()"></div>
+        </div>
+        <div class="row"><span class="lbl">Nâng đáy (mm)</span>
+          <div class="inp"><input type="number" id="floor-raise" value="0" oninput="refresh()"></div>
+        </div>
+        <div class="row"><span class="lbl">Âm rãnh hậu</span>
+          <div class="inp"><input type="number" id="back-gd" value="8" oninput="refresh()"></div>
+        </div>
+        <div class="row"><span class="lbl">Cách lưng tủ</span>
+          <div class="inp"><input type="number" id="back-go" value="18" oninput="refresh()"></div>
+        </div>
+      </div>
+
+      <div class="sec" style="display:none;">
+        <div class="sec-t">Đà chân</div>
+        <div class="row"><span class="lbl">Cao chân</span>
+          <div class="inp"><input type="number" id="tk-h" value="0" oninput="refresh()"></div>
+        </div>
+        <div class="row"><span class="lbl">Thụt vào</span>
+          <div class="inp"><input type="number" id="tk-d" value="0" oninput="refresh()"></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-t">Tùy chọn</div>
+        <div class="tog-r"><span class="tog-l">Nóc</span><label class="sw"><input type="checkbox" id="has-top" checked
+              onchange="refresh()"><span class="sl"></span></label></div>
+        <div class="tog-r"><span class="tog-l">Hậu</span><label class="sw"><input type="checkbox" id="has-back" checked
+              onchange="refresh()"><span class="sl"></span></label></div>
+      </div>
+
+      <div class="sec" style="display:none;">
+        <div class="sec-t">Cánh tủ</div>
+        <div class="sg">
+          <button class="sb on" data-s="open" onclick="setS('open',this)"><span class="si">◻️</span>Trống</button>
+          <button class="sb" data-s="single_door" onclick="setS('single_door',this)"><span class="si">🚪</span>1
+            cánh</button>
+          <button class="sb" data-s="double_door" onclick="setS('double_door',this)"><span class="si">🚪🚪</span>2
+            cánh</button>
+          <button class="sb" data-s="doors" onclick="setS('doors',this)"><span class="si">🚪➕</span>Nhiều cánh</button>
+        </div>
+        <div id="door-cfg" style="margin-top:7px; display:none;">
+          <div id="num-doors-row" class="row" style="display:none; margin-bottom: 7px;">
+            <span class="lbl">Số cánh (>2)</span>
+            <div class="inp"><input type="number" id="num-doors" value="3" min="3" max="10" oninput="refresh()"></div>
+          </div>
+          <div class="sec-t" style="font-size: 10px; margin-bottom: 5px; color: #888;">Khe hở cánh (Thụt vào mm)</div>
+          <div class="row" style="margin-bottom: 4px;">
+            <span class="lbl">Trên / Dưới</span>
+            <div style="display:flex;gap:5px;">
+              <input type="number" id="door-gt" value="2" style="width:40px;height:20px;font-size:11px;"
+                oninput="refresh()">
+              <input type="number" id="door-gb" value="2" style="width:40px;height:20px;font-size:11px;"
+                oninput="refresh()">
+            </div>
+          </div>
+        <div class="row">
+            <span class="lbl">Trái / Phải</span>
+            <div style="display:flex;gap:5px;">
+              <input type="number" id="door-gl" value="2" style="width:40px;height:20px;font-size:11px;"
+                oninput="refresh()">
+              <input type="number" id="door-gr" value="2" style="width:40px;height:20px;font-size:11px;"
+                oninput="refresh()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="right" style="display:none;">
+      <div class="tabs">
+        <div class="tab on" onclick="showTab('3d',this)">🎲 3D</div>
+        <div class="tab" onclick="showTab('bom',this)">📋 BOM</div>
+      </div>
+      <div class="pane on" id="pane-3d">
+        <div class="p3-wrap"><canvas id="c3d"></canvas></div>
+      </div>
+      <div class="pane" id="pane-bom">
+        <div class="bom-wrap">
+          <table>
+            <tbody id="bom-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="btn btn-p" onclick="doBuild()">🏗 Build in SketchUp</button>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
+  <script>
+    let cabStyle = 'open';
+    const $ = id => document.getElementById(id);
+    const n = id => parseFloat($(id).value) || 0;
+    const b = id => $(id).checked;
+
+    function calcSpecs() {
+      const W = n('dim-w'), D = n('dim-d'), H = n('dim-h');
+      const t = n('mat-thick'), bt = n('back-thick');
+      const bgd = n('back-gd'), bgo = n('back-go');
+      const tkh = n('tk-h'), tkd = n('tk-d');
+      const gT = n('door-gt'), gB = n('door-gb'), gL = n('door-gl'), gR = n('door-gr'), nDr = n('num-doors');
+      const hasTop = b('has-top'), hasBack = b('has-back');
+
+      const body_h = H - tkh, inner_w = W - 2 * t, inner_h = body_h - 2 * t;
+      const specs = [];
+      let seq = 0;
+      const add = s => { seq++; specs.push({ ...s, seq }); };
+
+      if (tkh > 0) {
+        const tk_span = D - bgo - bt - tkd - t;
+        add({ name: 'Kick Back', role: 'toe_kick', lx: inner_w, ly: t, lz: tkh, tx: t, ty: D - bgo - bt - t, tz: 0 });
+        add({ name: 'Kick Front', role: 'toe_kick', lx: inner_w, ly: t, lz: tkh, tx: t, ty: tkd, tz: 0 });
+        if (tk_span > 50) {
+          add({ name: 'Kick Left', role: 'toe_kick', lx: t, ly: tk_span, lz: tkh, tx: t, ty: tkd + t, tz: 0 });
+          add({ name: 'Kick Right', role: 'toe_kick', lx: t, ly: tk_span, lz: tkh, tx: W - 2 * t, ty: tkd + t, tz: 0 });
+        }
+      }
+
+      add({ name: 'Bottom', role: 'floor', lx: inner_w, ly: D, lz: t, tx: t, ty: 0, tz: tkh });
+      add({ name: 'Side L', role: 'side', lx: t, ly: D, lz: body_h, tx: 0, ty: 0, tz: tkh });
+      add({ name: 'Side R', role: 'side', lx: t, ly: D, lz: body_h, tx: W - t, ty: 0, tz: tkh });
+
+      if (hasBack) {
+        const bh = hasTop ? inner_h : body_h - t;
+        add({ name: 'Back', role: 'back', lx: inner_w + 2 * bgd, ly: bt, lz: bh + (hasTop ? 2 * bgd : bgd), tx: t - bgd, ty: D - bgo - bt, tz: tkh + t - bgd });
+      }
+
+      if (hasTop) {
+        add({ name: 'Top', role: 'top', lx: inner_w, ly: D, lz: t, tx: t, ty: 0, tz: H - t });
+      }
+
+      if (['single_door', 'double_door', 'doors'].includes(cabStyle)) {
+        let ndr = 1;
+        if (cabStyle === 'double_door') ndr = 2;
+        if (cabStyle === 'doors') ndr = Math.max(3, nDr);
+
+        // Height = Body Height - top_gap - bot_gap
+        const dH = body_h - gT - gB;
+        const gap_between = 2.0;
+
+        // Total Width = Cabinet Width - left_gap - right_gap - (n-1)*between
+        const total_door_w = W - gL - gR - (ndr - 1) * gap_between;
+        const dW = total_door_w / ndr;
+
+        for (let i = 0; i < ndr; i++) {
+          const tx = gL + i * (dW + gap_between);
+          add({ name: `Door ${i + 1}`, role: 'door', lx: dW, ly: t, lz: dH, tx: tx, ty: -t, tz: tkh + gB });
+        }
+      }
+
+      return specs;
+    }
+
+    function initThree() {
+      renderer = new THREE.WebGLRenderer({ canvas: $('c3d'), antialias: true });
+      renderer.setClearColor(0x0f0f1a);
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(36, 1, 1, 100000);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      const light = new THREE.DirectionalLight(0xffffff, 0.6); light.position.set(1, 2, 1); scene.add(light);
+      onResize();
+    }
+
+    function onResize() {
+      const w = $('c3d').parentElement;
+      renderer.setSize(w.clientWidth, w.clientHeight);
+      camera.aspect = w.clientWidth / w.clientHeight; camera.updateProjectionMatrix();
+      render3d();
+    }
+
+    function rebuild3d() {
+      if (cabGroup3d) scene.remove(cabGroup3d);
+      cabGroup3d = new THREE.Group();
+      calcSpecs().forEach(s => {
+        const geo = new THREE.BoxGeometry(s.lx, s.lz, s.ly);
+        const mat = new THREE.MeshLambertMaterial({ color: 0x7c82f5 });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(s.tx + s.lx / 2, s.tz + s.lz / 2, s.ty + s.ly / 2);
+        cabGroup3d.add(mesh);
+      });
+      scene.add(cabGroup3d); render3d();
+    }
+
+    function render3d() {
+      if (!renderer) return;
+      camera.position.set(1000, 1500, 2000); camera.lookAt(300, 400, 300);
+      renderer.render(scene, camera);
+    }
+
+    function setS(s, btn) {
+      cabStyle = s;
+      document.querySelectorAll('.sb').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      $('door-cfg').style.display = s === 'open' ? 'none' : 'block';
+      $('num-doors-row').style.display = s === 'doors' ? 'flex' : 'none';
+      refresh();
+    }
+
+    function loadCabinetData(data) {
+      if(!data) return;
+      $('dim-w').value = data.width;
+      $('dim-d').value = data.depth;
+      $('dim-h').value = data.height;
+      $('mat-thick').value = data.thickness;
+      $('back-thick').value = data.back_thickness;
+      if(data.floor_raise !== undefined) $('floor-raise').value = data.floor_raise;
+      
+      const btn = document.querySelector(`.sb[data-s="${data.style}"]`);
+      if(btn) setS(data.style, btn);
+      refresh();
+    }
+
+    function showTab(id, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+      document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+      btn.classList.add('on'); $('pane-' + id).classList.add('on');
+      if (id === '3d') onResize();
+    }
+
+    function refresh() { rebuild3d(); }
+
+    function doBuild() {
+      const p = {
+        name: 'Tủ Base', width: n('dim-w'), depth: n('dim-d'), height: n('dim-h'),
+        thickness: n('mat-thick'), back_thickness: n('back-thick'),
+        floor_raise: n('floor-raise'),
+        back_groove_depth: n('back-gd'), back_groove_offset: n('back-go'),
+        toe_kick_height: n('tk-h'), toe_kick_depth: n('tk-d'),
+        has_top: b('has-top'), has_back: b('has-back'),
+        style: cabStyle,
+        door_gap_top: n('door-gt'), door_gap_bot: n('door-gb'),
+        door_gap_l: n('door-gl'), door_gap_r: n('door-gr'),
+        num_doors: (cabStyle === 'doors' ? n('num-doors') : (cabStyle === 'double_door' ? 2 : 1))
+      };
+      sketchup.build_cabinet(JSON.stringify(p));
+    }
+
+    let renderer, scene, camera, cabGroup3d;
+    window.onload = () => { initThree(); refresh(); };
+    window.onresize = onResize;
+  </script>
+</body>
+
+</html>
